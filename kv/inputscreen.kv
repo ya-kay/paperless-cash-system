@@ -8,11 +8,17 @@
             Rectangle:
                 size: self.size
                 pos: self.pos  
-        rows:3
+        rows:4
         Label:
+            id: product_name
             font_size: 30
             color: [0,0,0,1] #[r,g,b,a]
-            text: "XY ausgewählt, bitte Anzahl eingeben:"
+            text: ""
+        Label:
+            id: input_price
+            font_size: 30
+            color: [0,0,0,1] #[r,g,b,a]
+            text: ""    
         TextInput:
             id: input_count
             hint_text: "Anzahl angeben"
@@ -25,6 +31,7 @@
             Button:
                 text: "Einloggen"
                 on_release:
+                    app.calculate("input_screen", root)
                     app.change_screen("home_screen")
             Button:
                 text: "Abbrechen"

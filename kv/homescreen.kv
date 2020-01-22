@@ -15,41 +15,61 @@
             rows: 6
             cols: 5
             Button:
-                text: "1"
+                id: custom_btn_1
+                ### TODO: load from database
+                text: "Brötchen"
+                amount: 0.21
+                on_release: app.change_screen("input_screen", self.text, self.amount)  
             Button:
-                text: "2"
+                id: custom_btn_2
+                text: "Käsebrötchen"
+                amount: 0.45
+                on_release: app.change_screen("input_screen", self.text, self.amount)
             Button:
-                text: "3"
+                id: custom_btn_3
+                text: "Laib Brot"
             Button:
-                text: "4"    
+                id: custom_btn_4
+                text: "Vollkornbrot"    
             Button:
-                text: "5"
+                id: custom_btn_5
+                text: "Baguette"
             Button:
-                text: "6"
+                id: custom_btn_6
+                text: "Croissante"
             Button:
-                text: "7"
+                id: custom_btn_7
+                text: "Schoko-Croissante"
             Button:
-                text: "8"
+                id: custom_btn_8
+                text: "Donut"
             Button:
+                id: custom_btn_9
                 text: "9"
             Button:
+                id: custom_btn_10
                 text: "10"
             Button:
+                id: custom_btn_11
                 text: "11"
             Button:
+                id: custom_btn_12
                 text: "12"    
             Button:
+                id: custom_btn_13
                 text: "13"
             Button:
+                id: custom_btn_14
                 text: "14"
             Button:
+                id: custom_btn_15
                 text: "15"
             Button:
+                id: custom_btn_16
                 text: "16"
             Button:
+                id: custom_btn_17
                 text: "17"
-            Button:
-                text: "18"
             Button:
                 text: "Manuelle Eingabe"
                 on_release:
@@ -57,5 +77,13 @@
             Button:
                 text: "Done"
                 color: [255,255,255,1]
+                background_color: [0,255,0,1]
+                on_release:
+                    app.finish()
+            Button:
+                text: "Storno"
+                color: [255,255,255,1]
                 background_color: [255,0,0,1]
+                on_release:
+                    app.storno()        
           
