@@ -1,0 +1,61 @@
+<HomeScreen>:
+    FloatLayout:
+        TextInput:
+            pos_hint: {"top": 1, "left": 1}
+            size_hint:1, .2
+            id: output_total
+            font_size: 30
+            halign: "center"
+            readonly: True
+            text: "0"
+            padding: [0,20,0,0]
+        GridLayout:
+            pos_hint: {"top": .8, "left": 1}
+            size_hint: 1, .8
+            rows: 6
+            cols: 5
+            Button:
+                text: "1"
+            Button:
+                text: "2"
+            Button:
+                text: "3"
+            Button:
+                text: "4"    
+            Button:
+                text: "5"
+            Button:
+                text: "6"
+            Button:
+                text: "7"
+            Button:
+                text: "8"
+            Button:
+                text: "9"
+            Button:
+                text: "10"
+            Button:
+                text: "11"
+            Button:
+                text: "12"    
+            Button:
+                text: "13"
+            Button:
+                text: "14"
+            Button:
+                text: "15"
+            Button:
+                text: "16"
+            Button:
+                text: "17"
+            Button:
+                text: "18"
+            Button:
+                text: "Manuelle Eingabe"
+                on_release:
+                    app.change_screen("input_screen_m")
+            Button:
+                text: "Done"
+                color: [255,255,255,1]
+                background_color: [255,0,0,1]
+          

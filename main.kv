@@ -1,0 +1,17 @@
+#:include kv/homescreen.kv
+#:include kv/inputscreen.kv
+#:include kv/inputscreenm.kv
+
+GridLayout:
+    cols:1
+    ScreenManager:
+        id: screen_manager
+        HomeScreen:
+            name: "home_screen"
+            id: home_screen
+        InputScreen:
+            name: "input_screen"
+            id: input_screen    
+        InputScreenM:
+            name: "input_screen_m"
+            id: input_screen_m     

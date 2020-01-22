@@ -1,0 +1,32 @@
+#:import utils kivy.utils
+
+<InputScreen>:
+    GridLayout:
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex("#39B3F2")
+            Rectangle:
+                size: self.size
+                pos: self.pos  
+        rows:3
+        Label:
+            font_size: 30
+            color: [0,0,0,1] #[r,g,b,a]
+            text: "XY ausgewählt, bitte Anzahl eingeben:"
+        TextInput:
+            id: input_count
+            hint_text: "Anzahl angeben"
+            size: 0.3, 0.5
+            font_size: 30
+            halign: "center"
+            padding: [0,30,0,0] #[padding_left, padding_top, padding_right, padding_bottom]
+        GridLayout:
+            cols:2
+            Button:
+                text: "Einloggen"
+                on_release:
+                    app.change_screen("home_screen")
+            Button:
+                text: "Abbrechen"
+                on_release:
+                    app.change_screen("home_screen")       
