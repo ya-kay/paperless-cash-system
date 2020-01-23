@@ -1,17 +1,43 @@
 from kivy.app import App
 from kivy.lang import  Builder
 from kivy.uix.screenmanager import Screen
-import re
 from fpdf import FPDF 
+import re
+import requests
+import random
+import string
 
+import configparser
+import mysql.connector
+
+import qrcode
+
+
+
+### DATABASE init from config.ini
+config = configparser.ConfigParser()
+config.read('config.ini')
+mydb = mysql.connector.connect(
+    host = config['mysqlDB']['host'],
+    port = config['mysqlDB']['port'],
+    user = config['mysqlDB']['user'],
+    passwd = config['mysqlDB']['pass'],
+    db = config['mysqlDB']['db']
+)
+
+db_cursor = mydb.cursor()
+
+### SCREENs init
 class HomeScreen(Screen):
     pass
 class InputScreen(Screen):
     pass
 class InputScreenM(Screen):
     pass
+class FinishScreen(Screen):
+    pass
 
-total = 0;
+amount_total = 0;
 
 ### init PDF
 pdf = FPDF()
@@ -19,7 +45,7 @@ pdf.add_page()
 pdf.set_font("Arial", size=12)
 
 def validateInput(count, price):
-    ### todo creat regex just allow numbers and dot and comma
+    ### TODO: creat regex just allow numbers and dot and comma
     if not (count and price and (re.search('[a-zA-Z]', count)) and (re.search('[a-zA-Z]', price))):
         return True
     else:
@@ -51,10 +77,10 @@ class MainApp(App):
                 price = price.replace(",", ".")
 
             amount =  float(count) * float(price)
-            amount_total = float(self.root.ids["home_screen"].ids["output_total"].text) + amount
+            self.amount_total = float(self.root.ids["home_screen"].ids["output_total"].text) + amount
             self.root.ids["home_screen"].ids["output_total"].text = str(round(amount_total,2))
 
-            #### write receipt pdf --> TODO: print as Tablr
+            #### write receipt pdf --> TODO: print as Table
             if(len(args) > 0):
                 content = args[0].ids["product_name"].text + ": " + count + " x " + price + " EUR        " + str(round(amount,2)) + " EUR"
             else:
@@ -67,8 +93,30 @@ class MainApp(App):
             print("ERROR")
       
     def finish(self):
+        
         ### TODO: new screen -> Betrag gegeben / zurück eingeben / ausrechnen und auf den Beleg schreiben
-        pdf.output("simple_demo.pdf")
+
+        ### TODO: RANDOM Name
+        if self.amount_total == 0:
+            print("AAA")
+            self.change_screen("home_screen")
+        else:
+            print("BBB")
+            random_pdf_name = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(64)]) + '.pdf'
+            db_cursor.execute("INSERT INTO links (random_string, is_used) VALUES(%s, %s)", (random_pdf_name, 0))
+            mydb.commit()
+            pdf.output("./receipts/" + random_pdf_name)
+            self.change_screen("home_screen")
+
+            img = qrcode.make("URL; http://192.168.178.82:8125/" + random_pdf_name)
+            img.save("image.jpg")
+
+
+        ### Upload not required
+        ### with open('report.xls', 'rb') as f:
+        ### r = requests.post('http://httpbin.org/post', files={'report.xls': f})
+
+        ### MAYBE: show QR on own screen
 
     def storno(self):
             pass    

@@ -1,6 +1,7 @@
 #:include kv/homescreen.kv
 #:include kv/inputscreen.kv
 #:include kv/inputscreenm.kv
+#:include kv/finishscreen.kv
 
 GridLayout:
     cols:1
@@ -14,4 +15,7 @@ GridLayout:
             id: input_screen    
         InputScreenM:
             name: "input_screen_m"
-            id: input_screen_m     
+            id: input_screen_m
+        FinishScreen:
+            name: "finish_screen"
+            id: finish_screen         

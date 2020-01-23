@@ -1,0 +1,21 @@
+#:import utils kivy.utils
+
+<FinishScreen>:
+    GridLayout:
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex("#39B3F2")
+            Rectangle:
+                size: self.size
+                pos: self.pos  
+        rows:2
+        Label:
+            id: product_name
+            font_size: 30
+            color: [0,0,0,1] #[r,g,b,a]
+            text: "FINISH SCREEN"
+        Button: 
+            text: "Fertig!"
+            id: finish_button
+            on_release: app.finish()    
+            
