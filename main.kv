@@ -2,6 +2,7 @@
 #:include kv/inputscreen.kv
 #:include kv/inputscreenm.kv
 #:include kv/finishscreen.kv
+#:include kv/qr_screen.kv
 
 GridLayout:
     cols:1
@@ -18,4 +19,7 @@ GridLayout:
             id: input_screen_m
         FinishScreen:
             name: "finish_screen"
-            id: finish_screen         
+            id: finish_screen
+        QRScreen:
+            name: "qr_screen"
+            id: qr_screen               

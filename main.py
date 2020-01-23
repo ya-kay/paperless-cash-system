@@ -36,13 +36,16 @@ class InputScreenM(Screen):
     pass
 class FinishScreen(Screen):
     pass
+class QRScreen(Screen):
+    pass
 
-amount_total = 0;
 
 ### init PDF
 pdf = FPDF()
 pdf.add_page()
 pdf.set_font("Arial", size=12)
+
+#res = cursor.rowcount
 
 def validateInput(count, price):
     ### TODO: creat regex just allow numbers and dot and comma
@@ -51,10 +54,41 @@ def validateInput(count, price):
     else:
         return False        
 
-ui = Builder.load_file("main.kv") # after class definitions
+        
+
 class MainApp(App):
+    ui = Builder.load_file("main.kv") # after class definitions
+    amount_total = 0;
+    product_price_array = []
+
     def build(self):
-        return ui
+        db_cursor.execute("SELECT product_name, product_price FROM products WHERE fav = 1");
+        for product, price in db_cursor.fetchall():
+             self.product_price_array.append((product, price))
+        self.product_price_array = self.product_price_array[0:18]
+    
+        for index, id in enumerate(self.ui.ids["home_screen"].ids):
+            if(id.startswith("custom_btn")):
+                print(index-2, id)
+                if(len(self.product_price_array) > (index-2)):
+                    self.ui.ids["home_screen"].ids[id].text = self.product_price_array[index-2][0]
+                    self.ui.ids["home_screen"].ids[id].amount = self.product_price_array[index-2][1]
+                else:    
+                    self.ui.ids["home_screen"].ids[id].text = "Custom"
+                    self.ui.ids["home_screen"].ids[id].amount = "0.00"
+        # self.ui.ids["home_screen"].ids["custom_btn_1"].text = "updated")
+        # for product, price in self.product_price_array:
+        #     print(product, price)
+        #     self.root.ids["home_screen"].ids[""]
+
+        
+
+        # for index, id in enumerate(self.root.ids['home_screen'].ids):
+        #     if(id.startswith("custom_btn")):
+        #         id.parent.text = self.product_price_array[index-2][0]
+        #         id.parent.amount = self.product_price_array[index-2][1]
+        #        #  ### load products from db
+        return self.ui
 
     def change_screen(self, screen_name, *args):
         if(len(args) > 0):
@@ -69,8 +103,6 @@ class MainApp(App):
         if(validateInput(count, price)): 
             count = count.strip()
             price = price.strip()
-            print(count)
-            print(price)
             if "," in count:
                 count = count.replace(",", ".")
             if "," in price:
@@ -78,7 +110,7 @@ class MainApp(App):
 
             amount =  float(count) * float(price)
             self.amount_total = float(self.root.ids["home_screen"].ids["output_total"].text) + amount
-            self.root.ids["home_screen"].ids["output_total"].text = str(round(amount_total,2))
+            self.root.ids["home_screen"].ids["output_total"].text = str(round(self.amount_total,2))
 
             #### write receipt pdf --> TODO: print as Table
             if(len(args) > 0):
@@ -98,10 +130,8 @@ class MainApp(App):
 
         ### TODO: RANDOM Name
         if self.amount_total == 0:
-            print("AAA")
             self.change_screen("home_screen")
         else:
-            print("BBB")
             random_pdf_name = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(64)]) + '.pdf'
             db_cursor.execute("INSERT INTO links (random_string, is_used) VALUES(%s, %s)", (random_pdf_name, 0))
             mydb.commit()
@@ -111,6 +141,9 @@ class MainApp(App):
             img = qrcode.make("URL; http://192.168.178.82:8125/" + random_pdf_name)
             img.save("image.jpg")
 
+            self.root.ids["home_screen"].ids["output_total"].text = "0"
+            self.change_screen("qr_screen")
+
 
         ### Upload not required
         ### with open('report.xls', 'rb') as f:
@@ -119,8 +152,6 @@ class MainApp(App):
         ### MAYBE: show QR on own screen
 
     def storno(self):
-            pass    
-
-
+            pass 
 
 MainApp().run()

@@ -1,0 +1,18 @@
+#:import utils kivy.utils
+
+<QRScreen>:
+    GridLayout:
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex("#39B3F2")
+            Rectangle:
+                size: self.size
+                pos: self.pos  
+        rows:2
+        Image:
+            source: "image.jpg"
+        Button: 
+            text: "Fertig!"
+            id: finish_button
+            on_release: app.change_screen("home_screen")  
+            

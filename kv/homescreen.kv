@@ -10,66 +10,62 @@
             text: "0"
             padding: [0,20,0,0]
         GridLayout:
+            id: home_screen_grid
             pos_hint: {"top": .8, "left": 1}
             size_hint: 1, .8
             rows: 6
             cols: 5
             Button:
                 id: custom_btn_1
-                ### TODO: load from database
-                text: "Brötchen"
-                amount: 0.21
                 on_release: app.change_screen("input_screen", self.text, self.amount)  
             Button:
                 id: custom_btn_2
-                text: "Käsebrötchen"
-                amount: 0.45
                 on_release: app.change_screen("input_screen", self.text, self.amount)
             Button:
                 id: custom_btn_3
-                text: "Laib Brot"
+                on_release: app.change_screen("input_screen", self.text, self.amount)  
             Button:
                 id: custom_btn_4
-                text: "Vollkornbrot"    
+                on_release: app.change_screen("input_screen", self.text, self.amount)     
             Button:
                 id: custom_btn_5
-                text: "Baguette"
+                on_release: app.change_screen("input_screen", self.text, self.amount)  
             Button:
                 id: custom_btn_6
-                text: "Croissante"
+                on_release: app.change_screen("input_screen", self.text, self.amount)  
             Button:
                 id: custom_btn_7
-                text: "Schoko-Croissante"
+                on_release: app.change_screen("input_screen", self.text, self.amount)  
             Button:
                 id: custom_btn_8
-                text: "Donut"
+                on_release: app.change_screen("input_screen", self.text, self.amount)  
             Button:
                 id: custom_btn_9
-                text: "9"
+                on_release: app.change_screen("input_screen", self.text, self.amount)  
             Button:
                 id: custom_btn_10
-                text: "10"
+                on_release: app.change_screen("input_screen", self.text, self.amount)  
             Button:
                 id: custom_btn_11
-                text: "11"
+                on_release: app.change_screen("input_screen", self.text, self.amount)  
             Button:
                 id: custom_btn_12
-                text: "12"    
+                on_release: app.change_screen("input_screen", self.text, self.amount)  
             Button:
                 id: custom_btn_13
-                text: "13"
+                on_release: app.change_screen("input_screen", self.text, self.amount)  
             Button:
                 id: custom_btn_14
-                text: "14"
+                on_release: app.change_screen("input_screen", self.text, self.amount)  
             Button:
                 id: custom_btn_15
-                text: "15"
+                on_release: app.change_screen("input_screen", self.text, self.amount)  
             Button:
                 id: custom_btn_16
-                text: "16"
+                on_release: app.change_screen("input_screen", self.text, self.amount)  
             Button:
                 id: custom_btn_17
-                text: "17"
+                on_release: app.change_screen("input_screen", self.text, self.amount)  
             Button:
                 text: "Manuelle Eingabe"
                 on_release:
