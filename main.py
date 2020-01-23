@@ -1,7 +1,7 @@
 from kivy.app import App
 from kivy.lang import  Builder
 from kivy.uix.screenmanager import Screen
-from fpdf import FPDF 
+from fpdf import FPDF, HTMLMixin
 import re
 import requests
 import random
@@ -11,6 +11,8 @@ import configparser
 import mysql.connector
 
 import qrcode
+import locale
+locale.setlocale(locale.LC_ALL, 'de_DE')
 
 
 
@@ -27,6 +29,10 @@ mydb = mysql.connector.connect(
 
 db_cursor = mydb.cursor()
 
+### HTML to PDF
+# class HTML2PDF(FPDF, HTMLMixin):
+#     pass
+
 ### SCREENs init
 class HomeScreen(Screen):
     pass
@@ -39,10 +45,6 @@ class FinishScreen(Screen):
 class QRScreen(Screen):
     pass
 
-
-
-
-#res = cursor.rowcount
 
 def validateInput(count, price):
     ### TODO: creat regex just allow numbers and dot and comma
@@ -64,6 +66,8 @@ class MainApp(App):
     pdf.set_font("Arial", size=12)
 
     def build(self):
+
+        ### load from database
         db_cursor.execute("SELECT product_name, product_price FROM products WHERE fav = 1");
         for product, price in db_cursor.fetchall():
              self.product_price_array.append((product, price))
@@ -77,18 +81,7 @@ class MainApp(App):
                 else:    
                     self.ui.ids["home_screen"].ids[id].text = "Custom"
                     self.ui.ids["home_screen"].ids[id].amount = "0.00"
-        # self.ui.ids["home_screen"].ids["custom_btn_1"].text = "updated")
-        # for product, price in self.product_price_array:
-        #     print(product, price)
-        #     self.root.ids["home_screen"].ids[""]
 
-        
-
-        # for index, id in enumerate(self.root.ids['home_screen'].ids):
-        #     if(id.startswith("custom_btn")):
-        #         id.parent.text = self.product_price_array[index-2][0]
-        #         id.parent.amount = self.product_price_array[index-2][1]
-        #        #  ### load products from db
         return self.ui
 
     def change_screen(self, screen_name, *args):
@@ -113,13 +106,21 @@ class MainApp(App):
             self.amount_total = float(self.root.ids["home_screen"].ids["output_total"].text) + amount
             self.root.ids["home_screen"].ids["output_total"].text = str(round(self.amount_total,2))
 
-            #### write receipt pdf --> TODO: print as Table
+            #### write receipt pdf
+            col_width = self.pdf.w / 3.5
             if(len(args) > 0):
-                content = args[0].ids["product_name"].text + ": " + count + " x " + price + " EUR        " + str(round(amount,2)) + " EUR"
+                # content = args[0].ids["product_name"].text + ": " + count + " x " + price + " EUR        " + str(locale.format_string('%.2f', amount, True)) + " EUR"
+                self.pdf.cell(col_width, self.pdf.font_size*1.5,txt=args[0].ids["product_name"].text, border=1)
             else:
-                content = "Eingabe: " + count + " x " + price + " EUR        " + str(round(amount,2)) + " EUR"   
-            self.pdf.cell(200, 10, txt=content, ln=1, align="C")
-            ### 
+                self.pdf.cell(col_width, self.pdf.font_size*1.5, "Eingabe", border=1)
+
+            self.pdf.cell(col_width, self.pdf.font_size*1.5,txt=(count + " x " + str(locale.format_string('%.2f', float(price), True)) + " EUR"), border=1)
+            self.pdf.cell(col_width, self.pdf.font_size*1.5,txt=str(locale.format_string('%.2f', amount, True) + " EUR"), border=1)
+            self.pdf.ln(self.pdf.font_size*1.5)    
+                # content = "Eingabe: " + count + " x " + price + " EUR        " + str(locale.format_string('%.2f', amount, True)) + " EUR"
+                   
+                #self.pdf.cell(200, 10, txt=content, ln=1, align="C")
+                #  
             self.root.ids[screen_name].ids["input_count"].text = ""
             self.root.ids[screen_name].ids["input_price"].text = ""
         else:
@@ -128,8 +129,6 @@ class MainApp(App):
     def finish(self):
         
         ### TODO: new screen -> Betrag gegeben / zurück eingeben / ausrechnen und auf den Beleg schreiben
-
-        ### TODO: RANDOM Name
         if self.amount_total == 0:
             self.change_screen("home_screen")
         else:
@@ -154,9 +153,6 @@ class MainApp(App):
         ### Upload not required
         ### with open('report.xls', 'rb') as f:
         ### r = requests.post('http://httpbin.org/post', files={'report.xls': f})
-
-        ### MAYBE: show QR on own screen
-
     def storno(self):
             pass 
 
