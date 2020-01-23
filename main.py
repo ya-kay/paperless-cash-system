@@ -40,10 +40,7 @@ class QRScreen(Screen):
     pass
 
 
-### init PDF
-pdf = FPDF()
-pdf.add_page()
-pdf.set_font("Arial", size=12)
+
 
 #res = cursor.rowcount
 
@@ -61,6 +58,11 @@ class MainApp(App):
     amount_total = 0;
     product_price_array = []
 
+    ### init PDF
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+
     def build(self):
         db_cursor.execute("SELECT product_name, product_price FROM products WHERE fav = 1");
         for product, price in db_cursor.fetchall():
@@ -69,7 +71,6 @@ class MainApp(App):
     
         for index, id in enumerate(self.ui.ids["home_screen"].ids):
             if(id.startswith("custom_btn")):
-                print(index-2, id)
                 if(len(self.product_price_array) > (index-2)):
                     self.ui.ids["home_screen"].ids[id].text = self.product_price_array[index-2][0]
                     self.ui.ids["home_screen"].ids[id].amount = self.product_price_array[index-2][1]
@@ -117,7 +118,7 @@ class MainApp(App):
                 content = args[0].ids["product_name"].text + ": " + count + " x " + price + " EUR        " + str(round(amount,2)) + " EUR"
             else:
                 content = "Eingabe: " + count + " x " + price + " EUR        " + str(round(amount,2)) + " EUR"   
-            pdf.cell(200, 10, txt=content, ln=1, align="C")
+            self.pdf.cell(200, 10, txt=content, ln=1, align="C")
             ### 
             self.root.ids[screen_name].ids["input_count"].text = ""
             self.root.ids[screen_name].ids["input_price"].text = ""
@@ -135,11 +136,16 @@ class MainApp(App):
             random_pdf_name = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(64)]) + '.pdf'
             db_cursor.execute("INSERT INTO links (random_string, is_used) VALUES(%s, %s)", (random_pdf_name, 0))
             mydb.commit()
-            pdf.output("./receipts/" + random_pdf_name)
-            self.change_screen("home_screen")
+            self.pdf.output("./receipts/" + random_pdf_name)
+
+            self.pdf = FPDF()
+            self.pdf.add_page()
+            self.pdf.set_font("Arial", size=12)
 
             img = qrcode.make("URL; http://192.168.178.82:8125/" + random_pdf_name)
-            img.save("image.jpg")
+            img.save("./images/img_" + random_pdf_name[0:-4]+".jpg")
+            self.root.ids["qr_screen"].ids["qr_image"].source = "./images/img_" + random_pdf_name[0:-4] + ".jpg"
+
 
             self.root.ids["home_screen"].ids["output_total"].text = "0"
             self.change_screen("qr_screen")
