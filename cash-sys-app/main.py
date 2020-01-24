@@ -6,13 +6,19 @@ import re
 import requests
 import random
 import string
+import io
 
 import configparser
 import mysql.connector
 
 import qrcode
-import locale
-locale.setlocale(locale.LC_ALL, 'de_DE')
+
+from kivy.core.window import Window
+Window.keyboard_anim_args = {'d': .2, 't': 'in_out_expo'}
+Window.softinput_mode = "below_target"
+
+
+
 
 
 
@@ -114,8 +120,8 @@ class MainApp(App):
             else:
                 self.pdf.cell(col_width, self.pdf.font_size*1.5, "Eingabe", border=1)
 
-            self.pdf.cell(col_width, self.pdf.font_size*1.5,txt=(count + " x " + str(locale.format_string('%.2f', float(price), True)) + " EUR"), border=1)
-            self.pdf.cell(col_width, self.pdf.font_size*1.5,txt=str(locale.format_string('%.2f', amount, True) + " EUR"), border=1)
+            self.pdf.cell(col_width, self.pdf.font_size*1.5,txt=(count + " x " + str("{:.2f}".format(float(price)) + " EUR")), border=1)
+            self.pdf.cell(col_width, self.pdf.font_size*1.5,txt=str("{:.2f}".format(float(amount)) + " EUR"), border=1)
             self.pdf.ln(self.pdf.font_size*1.5)    
                 # content = "Eingabe: " + count + " x " + price + " EUR        " + str(locale.format_string('%.2f', amount, True)) + " EUR"
                    
@@ -135,24 +141,39 @@ class MainApp(App):
             random_pdf_name = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(64)]) + '.pdf'
             db_cursor.execute("INSERT INTO links (random_string, is_used) VALUES(%s, %s)", (random_pdf_name, 0))
             mydb.commit()
-            self.pdf.output("./receipts/" + random_pdf_name)
+
+            ### TODO: Upload PDF,
+            
+            ### Upload 
+           
+            # CAN'T store files on running ios App
+            # self.pdf.output("./receipts/" + random_pdf_name)
+            # with open("./receipts/" + random_pdf_name, 'rb') as f:
+
+
+            # safe pdf content as string, CAREFUL since python 3.x need encode("latin-1") https://pyfpdf.readthedocs.io/en/latest/reference/output/index.html)
+
+            pdf_string = self.pdf.output("", "S").encode("latin-1")
+            requests.post('http://192.168.178.82:8125/post', files={random_pdf_name: pdf_string}, headers={"file_name": random_pdf_name})
+
 
             self.pdf = FPDF()
             self.pdf.add_page()
             self.pdf.set_font("Arial", size=12)
 
-            img = qrcode.make("URL; http://192.168.178.82:8125/" + random_pdf_name)
-            img.save("./images/img_" + random_pdf_name[0:-4]+".jpg")
-            self.root.ids["qr_screen"].ids["qr_image"].source = "./images/img_" + random_pdf_name[0:-4] + ".jpg"
+            ### TODO: QRScreen -> select between print and create qrcode
+            ### TODO: QRCode displayed on server -> extra screen
+
+            # img = qrcode.make("URL; http://192.168.178.82:8125/" + random_pdf_name)
+            # img.save("./images/img_" + random_pdf_name[0:-4]+".jpg")
+            # self.root.ids["qr_screen"].ids["qr_image"].source = "./images/img_" + random_pdf_name[0:-4] + ".jpg"
 
 
             self.root.ids["home_screen"].ids["output_total"].text = "0"
             self.change_screen("qr_screen")
 
 
-        ### Upload not required
-        ### with open('report.xls', 'rb') as f:
-        ### r = requests.post('http://httpbin.org/post', files={'report.xls': f})
+       
     def storno(self):
             pass 
 

@@ -2,6 +2,7 @@ var http = require('http');
 var fs = require('fs');
 var path = require('path');
 var mysql = require('mysql');
+var qrcodeModul = require('./qrcode.js');
 
 var con = mysql.createConnection({
   host: "127.0.0.1",
@@ -17,12 +18,25 @@ con.connect(function(err) {
     else console.log("Connected!");
 
 http.createServer(function (request, response) {
+
+    if(request.method == "POST" && request.url == "/post"){
+        var pdf_name = request.headers["file_name"];
+        var wstream = fs.createWriteStream('./receipts/' + pdf_name);
+            
+        request.pipe(wstream);
+
+        request.on('end', function(){
+            response.writeHead(200);
+            response.end();
+        });
+    }
+
+    if(request.method == "GET"){
     var address_path = request.url.toString();
     address_path = address_path.substring(1,address_path.length)
 
     con.query("SELECT * from links WHERE random_string = ?",[address_path], function (err, result) {
         if (err) throw err;
-        console.log(result)
         if(result.length == 1){
             if(result[0].is_used == 0){     //// TODO: add timestamp comparison
 
@@ -71,6 +85,7 @@ http.createServer(function (request, response) {
         response.end("Error");
     }
     });
+}
 
 }).listen(8125);
 });
