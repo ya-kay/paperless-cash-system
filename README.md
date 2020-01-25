@@ -1,7 +1,7 @@
 # paperless-cash-system
 
-- [ ] a python mobile app with https://github.com/kivy/kivy
-- [ ] a own written cash system
+- [X] a python mobile app with https://github.com/kivy/kivy
+- [X] a own written cash system
 - [ ] write a reiceipt as pdf
 - [X] set up database
 - [X] create webserver with one-time-use download-links, TODO: add validation of one minute
