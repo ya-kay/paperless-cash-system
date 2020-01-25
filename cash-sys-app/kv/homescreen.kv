@@ -4,11 +4,11 @@
             pos_hint: {"top": 1, "left": 1}
             size_hint:1, .2
             id: output_total
-            font_size: 50
+            font_size: self.height / 2
             halign: "center"
             readonly: True
             text: "0"
-            padding: [0,50,0,0]
+            padding: [0, (self.height-self.line_height)/2]
         GridLayout:
             id: home_screen_grid
             pos_hint: {"top": .8, "left": 1}

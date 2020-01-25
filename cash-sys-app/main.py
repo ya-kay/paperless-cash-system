@@ -129,7 +129,36 @@ class MainApp(App):
         if self.amount_total == 0:
             self.change_screen("home_screen")
         else: 
-            self.change_screen("finish_screen")       
+            self.root.ids["finish_screen"].ids["output_total"].text = self.root.ids["home_screen"].ids["output_total"].text
+            self.change_screen("finish_screen")
+
+    def finishPayment(self):
+        col_width = self.pdf.w / 3.5
+
+        total = self.root.ids["finish_screen"].ids["output_total"].text
+        input = self.root.ids["finish_screen"].ids["input_money"].text
+        back = self.root.ids["finish_screen"].ids["money_back"].text
+
+        if(total == "" or input == "" or back == ""):
+            self.change_screen("home_screen")   
+        else:
+            self.pdf.cell(col_width, self.pdf.font_size*1.5, "Total", border=1)
+            self.pdf.cell(col_width, self.pdf.font_size*1.5,txt= "", border=1)
+            self.pdf.cell(col_width, self.pdf.font_size*1.5,txt= (str("{:.2f}".format(float(total))) + " EUR"), border=1)
+            self.pdf.ln(self.pdf.font_size*1.5)    
+
+            self.pdf.cell(col_width, self.pdf.font_size*1.5, "Gegeben", border=1)
+            self.pdf.cell(col_width, self.pdf.font_size*1.5,txt= "", border=1)
+            self.pdf.cell(col_width, self.pdf.font_size*1.5,txt= (str("{:.2f}".format(float(input))) + " EUR"), border=1)
+            self.pdf.ln(self.pdf.font_size*1.5)
+
+            self.pdf.cell(col_width, self.pdf.font_size*1.5, "Zurück", border=1)
+            self.pdf.cell(col_width, self.pdf.font_size*1.5,txt= "", border=1)
+            self.pdf.cell(col_width, self.pdf.font_size*1.5,txt= (str("{:.2f}".format(float(back))) + " EUR"), border=1)
+            self.pdf.ln(self.pdf.font_size*1.5)
+
+            self.change_screen("qr_screen")     
+                   
     def finish(self, mode):
         
         random_pdf_name = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(64)]) + '.pdf'
@@ -155,6 +184,11 @@ class MainApp(App):
         self.root.ids["input_screen_m"].ids["input_count"].text = ""
         self.root.ids["input_screen_m"].ids["input_price"].text = "" 
         self.root.ids["home_screen"].ids["output_total"].text = "0"
+
+        self.root.ids["finish_screen"].ids["output_total"].text = ""
+        self.root.ids["finish_screen"].ids["input_money"].text = ""
+        self.root.ids["finish_screen"].ids["money_back"].text = ""
+
         self.initPDF()
 
 
@@ -178,8 +212,8 @@ MainApp().run()
 ###### TODO: Design --> HomeScreen InputText dicker, größer, mehr Abstand zum Top [X]
 ###### TODO: Produkte --> Label Hintergrundfarbe, Schrift größer, dicker [X]
 ###### TODO: QR-Screen -> remove image, ask if qr or print [X]
-###### TODO: Finish-Screen -> total, gegeben, zurück -> pdf print also
-###### TODO: ADD Header to PDF
+###### TODO: Finish-Screen -> total, gegeben, zurück -> pdf print also [X]
+###### TODO: ADD Header to PDF with name and date, time
 
 
 
