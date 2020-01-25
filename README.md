@@ -25,7 +25,7 @@
 - python3 toolchain.py create cash-system ~/Desktop/python/cash-sys-app/cash-sys-app
 - open cash-system-ios/cash-system.xcodeproj 
 - press on cash-system-project -> signing -> choose developer
-- before run on system, start with "node server.js" webserver and mysql database
+- before run on ios device, start with "node server.js" webserver and mysql database
 
 # problems while programming:
 - [X] building ios apps: resolved with copying all pip3 installed packages from /usr/local/lib/python3.7/site-packages/ to ./kivy-ios/dist/root/python3/lib/python3.7/site-packages, copying toolchain.py, toolchain.pyc, sh.py and sh.pyc, ... also in the ./kivy-ios/.../site-packages folder (https://github.com/kivy/kivy-ios/issues/320)
