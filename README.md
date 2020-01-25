@@ -32,3 +32,21 @@
 - [X] installed failed packages with "python3 toolchain.py pip install PACKAGE"
 - [X] can't store files on running iOS system, so use pdf.output("", "S").encode("latin-1") (https://pyfpdf.readthedocs.io/en/latest/reference/output/index.html)
 - [ ] locale.setlocale(locale.LC_ALL, 'de_DE') --> running ios doesn't know locale.LC_ALL --> replaced with string format 
+
+
+
+
+###### TODO: Abbrechen --> inputtext leeren [X]
+###### TODO: Amount == 0; nicht done drücken [X]
+###### TODO: Storno --> alles 0, neues PDF [X]
+###### TODO: Design --> HomeScreen InputText dicker, größer, mehr Abstand zum Top [X]
+###### TODO: Produkte --> Label Hintergrundfarbe, Schrift größer, dicker [X]
+###### TODO: QR-Screen -> remove image, ask if qr or print [X]
+###### TODO: Finish-Screen -> total, gegeben, zurück -> pdf print also [X]
+###### TODO: ADD Header to PDF with name and date, time
+
+
+
+###### TODO: admin-console to edit database products
+###### TODO: add validation of one minute
+
