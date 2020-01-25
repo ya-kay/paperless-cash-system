@@ -2,7 +2,7 @@ var http = require('http');
 var fs = require('fs');
 var path = require('path');
 var mysql = require('mysql');
-var qrcodeModul = require('./qrcode.js');
+var opn = require('opn');
 
 var con = mysql.createConnection({
   host: "127.0.0.1",
@@ -25,6 +25,8 @@ http.createServer(function (request, response) {
             
         request.pipe(wstream);
 
+        opn('http://192.168.178.82:8125/qr/' + pdf_name);
+
         request.on('end', function(){
             response.writeHead(200);
             response.end();
@@ -33,6 +35,20 @@ http.createServer(function (request, response) {
 
     if(request.method == "GET"){
     var address_path = request.url.toString();
+    
+    if(address_path.startsWith("/qr")){
+        fs.readFile('./index.html', function (err, html) {
+            name = address_path.replace("/qr", "");
+            response.writeHead(200, {'Content-Type': 'text/html'});
+            response.write(html); 
+            response.write('qrcode.makeCode("URL; http://192.168.178.82:8125' + name + '"); \
+                            setTimeout("window.close()",15000); \
+                            </script> \
+                            </body> \
+                            </html>');
+            response.end();
+        });
+    } else {
     address_path = address_path.substring(1,address_path.length)
 
     con.query("SELECT * from links WHERE random_string = ?",[address_path], function (err, result) {
@@ -85,6 +101,7 @@ http.createServer(function (request, response) {
         response.end("Error");
     }
     });
+}
 }
 
 }).listen(8125);
