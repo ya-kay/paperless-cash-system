@@ -13,12 +13,10 @@ import mysql.connector
 
 import qrcode
 
-from kivy.core.window import Window
-Window.keyboard_anim_args = {'d': .2, 't': 'in_out_expo'}
-Window.softinput_mode = "below_target"
-
-
-
+### doesnt needed cause no keyboard pops up, inputtext readonly, write with numpad
+# from kivy.core.window import Window
+# Window.keyboard_anim_args = {'d': .2, 't': 'in_out_expo'}
+# Window.softinput_mode = "below_target"
 
 
 
@@ -115,7 +113,6 @@ class MainApp(App):
             #### write receipt pdf
             col_width = self.pdf.w / 3.5
             if(len(args) > 0):
-                # content = args[0].ids["product_name"].text + ": " + count + " x " + price + " EUR        " + str(locale.format_string('%.2f', amount, True)) + " EUR"
                 self.pdf.cell(col_width, self.pdf.font_size*1.5,txt=args[0].ids["product_name"].text, border=1)
             else:
                 self.pdf.cell(col_width, self.pdf.font_size*1.5, "Eingabe", border=1)
@@ -123,10 +120,7 @@ class MainApp(App):
             self.pdf.cell(col_width, self.pdf.font_size*1.5,txt=(count + " x " + str("{:.2f}".format(float(price)) + " EUR")), border=1)
             self.pdf.cell(col_width, self.pdf.font_size*1.5,txt=str("{:.2f}".format(float(amount)) + " EUR"), border=1)
             self.pdf.ln(self.pdf.font_size*1.5)    
-                # content = "Eingabe: " + count + " x " + price + " EUR        " + str(locale.format_string('%.2f', amount, True)) + " EUR"
-                   
-                #self.pdf.cell(200, 10, txt=content, ln=1, align="C")
-                #  
+              
             self.root.ids[screen_name].ids["input_count"].text = ""
             self.root.ids[screen_name].ids["input_price"].text = ""
         else:
@@ -142,15 +136,6 @@ class MainApp(App):
             db_cursor.execute("INSERT INTO links (random_string, is_used) VALUES(%s, %s)", (random_pdf_name, 0))
             mydb.commit()
 
-            ### TODO: Upload PDF,
-            
-            ### Upload 
-           
-            # CAN'T store files on running ios App
-            # self.pdf.output("./receipts/" + random_pdf_name)
-            # with open("./receipts/" + random_pdf_name, 'rb') as f:
-
-
             # safe pdf content as string, CAREFUL since python 3.x need encode("latin-1") https://pyfpdf.readthedocs.io/en/latest/reference/output/index.html)
 
             pdf_string = self.pdf.output("", "S").encode("latin-1")
@@ -161,14 +146,6 @@ class MainApp(App):
             self.pdf.add_page()
             self.pdf.set_font("Arial", size=12)
 
-            ### TODO: QRScreen -> select between print and create qrcode
-            ### TODO: QRCode displayed on server -> extra screen
-
-            # img = qrcode.make("URL; http://192.168.178.82:8125/" + random_pdf_name)
-            # img.save("./images/img_" + random_pdf_name[0:-4]+".jpg")
-            # self.root.ids["qr_screen"].ids["qr_image"].source = "./images/img_" + random_pdf_name[0:-4] + ".jpg"
-
-
             self.root.ids["home_screen"].ids["output_total"].text = "0"
             self.change_screen("qr_screen")
 
@@ -178,3 +155,13 @@ class MainApp(App):
             pass 
 
 MainApp().run()
+
+
+###### TODO: Abbrechen --> inputtext leeren
+###### TODO: Amount == 0; nicht done drücken
+###### TODO: Storno --> alles 0, neues PDF
+###### TODO: Design --> HomeScreen InputText dicker, größer, mehr Abstand zum Top
+###### TODO: Produkte --> Label Hintergrundfarbe, Schrift größer, dicker
+###### TODO: QR-Screen -> remove image, ask if qr or print
+###### TODO: Finish-Screen -> total, gegeben, zurück -> pdf print also
+###### TODO: ADD Header to PDF

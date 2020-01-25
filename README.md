@@ -21,8 +21,13 @@
 - web-server handle get-request and check if the requested file wasn't used before and then answer with the pdf file
 
 
-# Problems while programming:
-- [X] building ios apps: resolved with copying all pip3 installed packages from /usr/local/lib/python3.7/site-packages/ to ./kivy-ios/dist/root/python3/lib/python3.7/site-packages, copying toolchain.py, toolchain.pyc, sh.py and sh.pyc also in the ./kivy-ios/.../site-packages (https://github.com/kivy/kivy-ios/issues/320)
-- [X] installed failed packages with python3 toolchain.py pip install PACKAGE
+# building ios app
+- python3 toolchain.py create cash-system ~/Desktop/python/cash-sys-app/cash-sys-app
+- open cash-system-ios/cash-system.xcodeproj 
+- press on cash-system-project -> signing -> choose developer
+
+# problems while programming:
+- [X] building ios apps: resolved with copying all pip3 installed packages from /usr/local/lib/python3.7/site-packages/ to ./kivy-ios/dist/root/python3/lib/python3.7/site-packages, copying toolchain.py, toolchain.pyc, sh.py and sh.pyc, ... also in the ./kivy-ios/.../site-packages folder (https://github.com/kivy/kivy-ios/issues/320)
+- [X] installed failed packages with "python3 toolchain.py pip install PACKAGE"
 - [X] can't store files on running iOS system, so use pdf.output("", "S").encode("latin-1") (https://pyfpdf.readthedocs.io/en/latest/reference/output/index.html)
 - [ ] locale.setlocale(locale.LC_ALL, 'de_DE') --> running ios doesn't know locale.LC_ALL --> replaced with string format 
