@@ -165,3 +165,8 @@ MainApp().run()
 ###### TODO: QR-Screen -> remove image, ask if qr or print
 ###### TODO: Finish-Screen -> total, gegeben, zurück -> pdf print also
 ###### TODO: ADD Header to PDF
+
+
+
+###### TODO: admin-console to edit database products
+###### TODO: add validation of one minute
