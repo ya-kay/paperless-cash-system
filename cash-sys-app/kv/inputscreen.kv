@@ -4,21 +4,23 @@
     GridLayout:
         canvas:
             Color:
-                rgb: utils.get_color_from_hex("#39B3F2")
+                rgb: utils.get_color_from_hex("#34495e")
             Rectangle:
                 size: self.size
                 pos: self.pos  
-        rows:4
-        Label:
-            id: product_name
-            font_size: 30
-            color: [0,0,0,1] #[r,g,b,a]
-            text: ""
-        Label:
-            id: input_price
-            font_size: 30
-            color: [0,0,0,1] #[r,g,b,a]
-            text: ""
+        rows:3
+        GridLayout:
+            rows:2
+            Label:
+                id: product_name
+                font_size: 40
+                color: [0.93,0.94,0.95,1] #[r,g,b,a]
+                text: ""
+            Label:
+                id: input_price
+                font_size: 40
+                color: [0.93,0.94,0.95,1] #[r,g,b,a]
+                text: ""
         GridLayout:
             cols:2                                                                             
             TextInput:
@@ -26,9 +28,9 @@
                 hint_text: "Anzahl angeben"
                 input_filter: {"9", "8", "7", "6", "5", "4", "3", "2", "1", "0", "."}
                 size: 0.3, 0.5
-                font_size: 30
+                font_size: 40
                 halign: "center"
-                padding: [0,30,0,0] #[padding_left, padding_top, padding_right, padding_bottom]
+                padding: [0,50,0,0] #[padding_left, padding_top, padding_right, padding_bottom]
                 readonly: True
             GridLayout:
                 rows:4
@@ -73,6 +75,8 @@
         GridLayout:
             cols:2
             Button:
+                # background_normal: ''
+                # background_color: 1, .3, .4, .85
                 text: "Einloggen"
                 on_release:
                     app.calculate("input_screen", root)
@@ -80,4 +84,5 @@
             Button:
                 text: "Abbrechen"
                 on_release:
+                    app.resetInputs()
                     app.change_screen("home_screen")       

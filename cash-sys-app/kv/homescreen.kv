@@ -4,11 +4,11 @@
             pos_hint: {"top": 1, "left": 1}
             size_hint:1, .2
             id: output_total
-            font_size: 30
+            font_size: 50
             halign: "center"
             readonly: True
             text: "0"
-            padding: [0,20,0,0]
+            padding: [0,50,0,0]
         GridLayout:
             id: home_screen_grid
             pos_hint: {"top": .8, "left": 1}
@@ -75,7 +75,7 @@
                 color: [255,255,255,1]
                 background_color: [0,255,0,1]
                 on_release:
-                    app.change_screen("finish_screen")
+                    app.checkFinish()
             Button:
                 text: "Storno"
                 color: [255,255,255,1]

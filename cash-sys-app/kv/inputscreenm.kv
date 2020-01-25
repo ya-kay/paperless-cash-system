@@ -16,9 +16,9 @@
                 hint_text: "Preis eingeben:"
                 input_filter: {"9", "8", "7", "6", "5", "4", "3", "2", "1", "0", "."}
                 size: 0.3, 0.5
-                font_size: 30
+                font_size: 40
                 halign: "center"
-                padding: [0,30,0,0] #[padding_left, padding_top, padding_right, padding_bottom]/
+                padding: [0,50,0,0] #[padding_left, padding_top, padding_right, padding_bottom]/
                 readonly: True
             GridLayout:
                 rows:4
@@ -66,9 +66,9 @@
                 hint_text: "Anzahl angeben"
                 input_filter: {"9", "8", "7", "6", "5", "4", "3", "2", "1", "0", "."}
                 size: 0.3, 0.5
-                font_size: 30
+                font_size: 40
                 halign: "center"
-                padding: [0,30,0,0] #[padding_left, padding_top, padding_right, padding_bottom]
+                padding: [0,50,0,0] #[padding_left, padding_top, padding_right, padding_bottom]
                 readonly: True
             GridLayout:
                 rows:4
@@ -120,4 +120,5 @@
             Button:
                 text: "Abbrechen"
                 on_release:
+                    app.resetInputs()
                     app.change_screen("home_screen")             

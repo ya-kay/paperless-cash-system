@@ -56,7 +56,6 @@ def validateInput(count, price):
         return True
     else:
         return False        
-
         
 
 class MainApp(App):
@@ -67,7 +66,7 @@ class MainApp(App):
     ### init PDF
     pdf = FPDF()
     pdf.add_page()
-    pdf.set_font("Arial", size=12)
+    pdf.set_font("Arial", size=12) 
 
     def build(self):
 
@@ -125,44 +124,60 @@ class MainApp(App):
             self.root.ids[screen_name].ids["input_price"].text = ""
         else:
             print("ERROR")
-      
-    def finish(self):
-        
-        ### TODO: new screen -> Betrag gegeben / zurück eingeben / ausrechnen und auf den Beleg schreiben
+
+    def checkFinish(self):
         if self.amount_total == 0:
             self.change_screen("home_screen")
-        else:
-            random_pdf_name = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(64)]) + '.pdf'
-            db_cursor.execute("INSERT INTO links (random_string, is_used) VALUES(%s, %s)", (random_pdf_name, 0))
-            mydb.commit()
+        else: 
+            self.change_screen("finish_screen")       
+    def finish(self, mode):
+        
+        random_pdf_name = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(64)]) + '.pdf'
+        db_cursor.execute("INSERT INTO links (random_string, is_used) VALUES(%s, %s)", (random_pdf_name, 0))
+        mydb.commit()
 
-            # safe pdf content as string, CAREFUL since python 3.x need encode("latin-1") https://pyfpdf.readthedocs.io/en/latest/reference/output/index.html)
+        # safe pdf content as string, CAREFUL since python 3.x need encode("latin-1") https://pyfpdf.readthedocs.io/en/latest/reference/output/index.html)
 
-            pdf_string = self.pdf.output("", "S").encode("latin-1")
+        pdf_string = self.pdf.output("", "S").encode("latin-1")
+        if mode == "qr":
             requests.post('http://192.168.178.82:8125/post', files={random_pdf_name: pdf_string}, headers={"file_name": random_pdf_name})
+        elif mode == "print":
+            print("Print job")
 
-
-            self.pdf = FPDF()
-            self.pdf.add_page()
-            self.pdf.set_font("Arial", size=12)
-
-            self.root.ids["home_screen"].ids["output_total"].text = "0"
-            self.change_screen("qr_screen")
+        self.storno()
+        self.change_screen("home_screen")
 
 
        
     def storno(self):
-            pass 
+        self.root.ids["input_screen"].ids["input_count"].text = ""
+        self.root.ids["input_screen"].ids["input_price"].text = ""
+        self.root.ids["input_screen_m"].ids["input_count"].text = ""
+        self.root.ids["input_screen_m"].ids["input_price"].text = "" 
+        self.root.ids["home_screen"].ids["output_total"].text = "0"
+        self.initPDF()
+
+
+    def resetInputs(self):
+        self.root.ids["input_screen"].ids["input_count"].text = ""
+        self.root.ids["input_screen"].ids["input_price"].text = ""
+        self.root.ids["input_screen_m"].ids["input_count"].text = ""
+        self.root.ids["input_screen_m"].ids["input_price"].text = ""
+
+    def initPDF(self):
+        self.pdf = FPDF()
+        self.pdf.add_page()
+        self.pdf.set_font("Arial", size=12)         
 
 MainApp().run()
 
 
-###### TODO: Abbrechen --> inputtext leeren
-###### TODO: Amount == 0; nicht done drücken
-###### TODO: Storno --> alles 0, neues PDF
-###### TODO: Design --> HomeScreen InputText dicker, größer, mehr Abstand zum Top
-###### TODO: Produkte --> Label Hintergrundfarbe, Schrift größer, dicker
-###### TODO: QR-Screen -> remove image, ask if qr or print
+###### TODO: Abbrechen --> inputtext leeren [X]
+###### TODO: Amount == 0; nicht done drücken [X]
+###### TODO: Storno --> alles 0, neues PDF [X]
+###### TODO: Design --> HomeScreen InputText dicker, größer, mehr Abstand zum Top [X]
+###### TODO: Produkte --> Label Hintergrundfarbe, Schrift größer, dicker [X]
+###### TODO: QR-Screen -> remove image, ask if qr or print [X]
 ###### TODO: Finish-Screen -> total, gegeben, zurück -> pdf print also
 ###### TODO: ADD Header to PDF
 
