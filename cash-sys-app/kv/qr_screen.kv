@@ -10,16 +10,16 @@
                 pos: self.pos  
         rows:2
         Label: 
-            text: "Abgeschlossen: Beleg als QR-Code oder Drucken:"
+            text: "Abgeschlossen: Beleg als QR-Code anzeigen"
             color: [0.93,0.94,0.95,1] #[r,g,b,a]
         GridLayout:
-            cols:2
+            cols:1
             Button: 
                 text: "QR"
                 id: finish_qr_button
                 on_release: app.finish("qr")
-            Button: 
-                text: "Ausdrucken"
-                id: finish_print_button
-                on_release: app.finish("print")    
+            # Button: 
+            #     text: "Ausdrucken"
+            #     id: finish_print_button
+            #     on_release: app.finish("print")    
             

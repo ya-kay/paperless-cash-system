@@ -1,7 +1,10 @@
 from kivy.app import App
 from kivy.lang import  Builder
 from kivy.uix.screenmanager import Screen
+from kivy.clock import Clock
+from kivy.animation import Animation
 from fpdf import FPDF, HTMLMixin
+from functools import partial
 import re
 import requests
 import random
@@ -48,6 +51,8 @@ class FinishScreen(Screen):
     pass
 class QRScreen(Screen):
     pass
+class LoadingScreen(Screen):
+    pass
 
 
 def validateInput(count, price):
@@ -60,6 +65,8 @@ def validateInput(count, price):
 
 class MainApp(App):
     ui = Builder.load_file("main.kv") # after class definitions
+
+   
     amount_total = 0;
     product_price_array = []
 
@@ -69,7 +76,6 @@ class MainApp(App):
     pdf.set_font("Arial", size=12) 
 
     def build(self):
-
         ### load from database
         db_cursor.execute("SELECT product_name, product_price FROM products WHERE fav = 1");
         for product, price in db_cursor.fetchall():
@@ -84,15 +90,20 @@ class MainApp(App):
                 else:    
                     self.ui.ids["home_screen"].ids[id].text = "Custom"
                     self.ui.ids["home_screen"].ids[id].amount = "0.00"
-
         return self.ui
 
+    def on_start(self):
+        anim = Animation(color=[1,1,1,1], duration=3)
+        anim.start(self.root.ids["loading_screen"].ids["lb_loading_screen"])
+        Clock.schedule_once(partial(self.change_screen, "home_screen"), 3.7)
+
     def change_screen(self, screen_name, *args):
-        if(len(args) > 0):
+        if(len(args) > 1):
             self.root.ids[screen_name].ids["product_name"].text = str(args[0])
             self.root.ids[screen_name].ids["input_price"].text = str(args[1])
         screen_manager = self.root.ids['screen_manager']
         screen_manager.current = screen_name
+    
 
     def calculate(self, screen_name, *args):
         count = self.root.ids[screen_name].ids["input_count"].text

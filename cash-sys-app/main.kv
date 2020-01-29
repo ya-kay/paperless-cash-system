@@ -1,3 +1,4 @@
+#:include kv/loadingscreen.kv
 #:include kv/homescreen.kv
 #:include kv/inputscreen.kv
 #:include kv/inputscreenm.kv
@@ -8,6 +9,9 @@ GridLayout:
     cols:1
     ScreenManager:
         id: screen_manager
+        LoadingScreen:
+            name: "loading_screen"
+            id: loading_screen
         HomeScreen:
             name: "home_screen"
             id: home_screen
