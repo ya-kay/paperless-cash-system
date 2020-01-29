@@ -5,6 +5,8 @@ from kivy.clock import Clock
 from kivy.animation import Animation
 from fpdf import FPDF, HTMLMixin
 from functools import partial
+from datetime import datetime
+
 import re
 import requests
 import random
@@ -54,18 +56,31 @@ class QRScreen(Screen):
 class LoadingScreen(Screen):
     pass
 
+class FPDF(FPDF):
+    def header(self):
+        # Select Arial bold 15
+        self.set_font('Arial', 'B', 15)
+        # Move to the right
+        self.cell(self.w/4)
+        # Framed title
+        self.cell(self.w/2, 10, 'Beleg: Yaniks Backstube', 1, 0, 'C')
+        self.cell(self.w/4)
+        # Line break
+        self.ln(20)
+
 
 def validateInput(count, price):
     ### TODO: creat regex just allow numbers and dot and comma
-    if not (count and price and (re.search('[a-zA-Z]', count)) and (re.search('[a-zA-Z]', price))):
-        return True
+    if (count and price and (re.search('[a-zA-Z]', count)) and (re.search('[a-zA-Z]', price))):
+        return False
+    elif ((float(count) <= 0) or (float(price) <= 0)):
+        return False
     else:
-        return False        
+        return True        
         
 
 class MainApp(App):
     ui = Builder.load_file("main.kv") # after class definitions
-
    
     amount_total = 0;
     product_price_array = []
@@ -121,7 +136,7 @@ class MainApp(App):
             self.root.ids["home_screen"].ids["output_total"].text = str(round(self.amount_total,2))
 
             #### write receipt pdf
-            col_width = self.pdf.w / 3.5
+            col_width = self.pdf.w / 3.3
             if(len(args) > 0):
                 self.pdf.cell(col_width, self.pdf.font_size*1.5,txt=args[0].ids["product_name"].text, border=1)
             else:
@@ -144,7 +159,7 @@ class MainApp(App):
             self.change_screen("finish_screen")
 
     def finishPayment(self):
-        col_width = self.pdf.w / 3.5
+        col_width = self.pdf.w / 3.3
 
         total = self.root.ids["finish_screen"].ids["output_total"].text
         input = self.root.ids["finish_screen"].ids["input_money"].text
@@ -166,7 +181,11 @@ class MainApp(App):
             self.pdf.cell(col_width, self.pdf.font_size*1.5, "Zurück", border=1)
             self.pdf.cell(col_width, self.pdf.font_size*1.5,txt= "", border=1)
             self.pdf.cell(col_width, self.pdf.font_size*1.5,txt= (str("{:.2f}".format(float(back))) + " EUR"), border=1)
-            self.pdf.ln(self.pdf.font_size*1.5)
+            self.pdf.ln(self.pdf.font_size*3)
+
+            now = datetime.now()
+            self.pdf.cell(self.pdf.w, self.pdf.font_size*1.5, now.strftime("%d/%m/%Y %H:%M:%S"), border=0, align="C")
+            self.pdf.ln(self.pdf.font_size*1.5) 
 
             self.change_screen("qr_screen")     
                    
@@ -200,6 +219,7 @@ class MainApp(App):
         self.root.ids["finish_screen"].ids["input_money"].text = ""
         self.root.ids["finish_screen"].ids["money_back"].text = ""
 
+        self.amount_total = 0
         self.initPDF()
 
 
