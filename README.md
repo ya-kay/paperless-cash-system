@@ -35,7 +35,7 @@
 
 
 
-###### TODO:
+# TODO:
 - [X] Abbrechen --> inputtext leeren 
 - [X] Amount == 0; nicht done drücken 
 - [X] Storno --> alles 0, neues PDF 
@@ -44,6 +44,6 @@
 - [X] QR-Screen -> remove image, ask if qr or print 
 - [X] Finish-Screen -> total, gegeben, zurück -> pdf print also 
 - [X] ADD Header to PDF with name and date, time
-- []admin-console to edit database products
-- [] add validation of one minute to one-time-use link
+- [ ] admin-console to edit database products
+- [ ] add validation of one minute to one-time-use link
 
