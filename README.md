@@ -35,18 +35,15 @@
 
 
 
-
-###### TODO: Abbrechen --> inputtext leeren [X]
-###### TODO: Amount == 0; nicht done drücken [X]
-###### TODO: Storno --> alles 0, neues PDF [X]
-###### TODO: Design --> HomeScreen InputText dicker, größer, mehr Abstand zum Top [X]
-###### TODO: Produkte --> Label Hintergrundfarbe, Schrift größer, dicker [X]
-###### TODO: QR-Screen -> remove image, ask if qr or print [X]
-###### TODO: Finish-Screen -> total, gegeben, zurück -> pdf print also [X]
-###### TODO: ADD Header to PDF with name and date, time
-
-
-
-###### TODO: admin-console to edit database products
-###### TODO: add validation of one minute
+###### TODO:
+- [X] Abbrechen --> inputtext leeren 
+- [X] Amount == 0; nicht done drücken 
+- [X] Storno --> alles 0, neues PDF 
+- [X] Design --> HomeScreen InputText dicker, größer, mehr Abstand zum Top 
+- [X] Produkte --> Label Hintergrundfarbe, Schrift größer, dicker 
+- [X] QR-Screen -> remove image, ask if qr or print 
+- [X] Finish-Screen -> total, gegeben, zurück -> pdf print also 
+- [X] ADD Header to PDF with name and date, time
+- []admin-console to edit database products
+- [] add validation of one minute to one-time-use link
 
