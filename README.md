@@ -1,6 +1,6 @@
 # paperless-cash-system
 
-This Application is a cash-system for iOS (and Android not done right now). It loads the products from a database and can handle manual inputs, which are not stored in the database. It creates a pdf receipt and loads it after paying on a node-server. The node-server generates a qr-code of the link and shows in automatically in the browser for the next 15 secs. The link behind the qrcode can just used one time. (Also will be added a expiration datetime of one minute after creating)
+This Application is a cash-system for iOS (and Android not done right now). It loads the products from a database for short-cut-products. It creates a pdf receipt and after paying the receipt will be loaded on a node-server. The node-server generates a qr-code of the link and shows in automatically in the browser for the next 15 secs. The link behind the qrcode can just used one time. (Also will be added a expiration datetime of one minute after creating)
 
 - [X] a python mobile app with https://github.com/kivy/kivy
 - [X] a own written cash system
