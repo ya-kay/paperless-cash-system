@@ -4,7 +4,7 @@ This Application is a cash-system for iOS (and Android not done right now). It l
 
 - [X] a python mobile app with https://github.com/kivy/kivy
 - [X] a own written cash system
-- [ ] write a reiceipt as pdf
+- [X] write a reiceipt as pdf
 - [X] set up database
 - [X] create webserver with one-time-use download-links, TODO: add validation of one minute
 - [X] after paying upload receipt on (local) server
